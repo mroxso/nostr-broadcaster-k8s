@@ -1,0 +1,20 @@
+#apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nostr-broadcaster
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      containers:
+      - name: nostr-broadcast
+        image: ghcr.io/mroxso/nostr-broadcast:latest
+        env:
+        - name: RELAY_FROM_URLS
+          value: "wss://relay.damus.io, wss://relay.nostr.band"
+        - name: RELAY_TO_URL
+          value: "wss://nostr.rocks"
+        - name: PUBLIC_KEY
+          value: "82341f882b6eabcd2ba7f1ef90aad961cf074af15b9ef44a09f9d2a8fbfbe6a2" # jack
+      restartPolicy: Never
+  backoffLimit: 4
