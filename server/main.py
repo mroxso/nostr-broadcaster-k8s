@@ -35,5 +35,25 @@ def deploy_job():
     # Return a success message
     return jsonify(message='Job "' + job.metadata['name'] + '" deployed successfully')
 
+@app.route('/jobs', methods=['GET'])
+def get_jobs():
+    # Get the list of jobs from the Kubernetes cluster
+    jobs = api.list_namespaced_job(namespace='default')
+
+    # Return the list of jobs
+    return jsonify(jobs.items)
+
+@app.route('/jobs/<job_name>', methods=['GET'])
+def get_job(job_name):
+    # Get the job from the Kubernetes cluster
+    job = api.read_namespaced_job(name=job_name, namespace='default')
+
+    # Return the job
+    return jsonify(job)
+
+@app.route('/', methods=['GET'])
+def index():
+    return jsonify(message='Hello world')
+
 if __name__ == '__main__':
     app.run(debug=True)
