@@ -1,0 +1,10 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+#   namespace: default
+  namespace: {{ .Release.Namespace }}
+  name: jobs-role
+rules:
+- apiGroups: ["batch"] # "" indicates the core API group
+  resources: ["jobs"]
+  verbs: ["get", "watch", "list", "create", "delete"]
