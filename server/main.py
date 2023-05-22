@@ -2,11 +2,15 @@ import uuid
 from flask import Flask, request, jsonify
 from kubernetes import client, config
 import yaml
+import os
 
 app = Flask(__name__)
 
 # Load the Kubernetes configuration
-config.load_kube_config()
+if(os.getenv('KUBERNETES_SERVICE_HOST')):
+    config.load_incluster_config()
+else:
+    config.load_kube_config()
 
 # Get the Kubernetes API client
 api = client.BatchV1Api()
