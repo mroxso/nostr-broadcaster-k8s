@@ -49,7 +49,8 @@ def deploy_job():
     api.create_namespaced_job(body=job, namespace='default')
 
     # Return a success message
-    return jsonify(message='Job "' + job.metadata['name'] + '" deployed successfully')
+    # return jsonify(message='Job "' + job.metadata['name'] + '" deployed successfully')
+    return job.metadata['name']
 
 @app.route('/jobs', methods=['GET'])
 def get_jobs():
