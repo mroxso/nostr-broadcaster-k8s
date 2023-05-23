@@ -65,6 +65,7 @@
         console.log(pubkey);
         window.document.getElementById('publickey').value = pubkey;
         nostrGetUserinfo(pubkey);
+        nostrGetUserRelays(pubkey);
       }
 
       async function nostrGetUserinfo(pubkey) {
@@ -80,6 +81,30 @@
                 const foundName = JSON.parse(data[2].content)['name'];
                 console.log("Found Name: " + foundName);
                 document.getElementById('login').innerHTML = `Logged in as ${foundName}`;
+            } else if (data[0] === "EOSE") {
+                relay.close();
+            }
+        }
+      }
+
+      async function nostrGetUserRelays(pubkey) {
+        const relay = new WebSocket('wss://relay.nostr.band');
+        let name = "";
+
+        relay.onopen = function(event) {
+            relay.send('["REQ", "133742071", {"kinds": [10002], "authors": ["'+pubkey+'"]}]');
+        };
+        relay.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            if (data[0] === "EVENT") {
+              relays = [];
+              for(tag of data[2]['tags']) {
+                if(tag[0] === "r") {
+                  console.log(tag[1]);
+                  relays.push(tag[1]);
+                }
+              }
+              document.getElementById('from_relays').value = relays.join(',');
             } else if (data[0] === "EOSE") {
                 relay.close();
             }
