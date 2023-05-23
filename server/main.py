@@ -1,5 +1,5 @@
 import uuid
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from kubernetes import client, config
 import yaml
 import os
@@ -53,7 +53,8 @@ def get_job(job_name):
 
 @app.route('/', methods=['GET'])
 def index():
-    return jsonify(message='Hello world')
+    # return jsonify(message='Hello world')
+    return render_template('/sites/index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
