@@ -5,6 +5,7 @@ import yaml
 import os
 import json
 import logging
+from nostr.key import PublicKey
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
@@ -26,12 +27,15 @@ coreApi = client.CoreV1Api()
 def deploy_job():
     # Form Data
     publickey = request.form['publickey']
+    if "npub" in publickey:
+        publickey = PublicKey.from_npub(publickey).hex()
+
     from_relays = request.form['from_relays']
     to_relay = request.form['to_relay']
     ip = request.remote_addr
     useragent = request.headers.get('User-Agent')
     print("=== FORM DATA ===")
-    print("Public Key: " + publickey)
+    print("Public Key (hex): " + publickey)
     print("From Relays: " + from_relays)
     print("To Relay: " + to_relay)
     print("IP: " + ip)
