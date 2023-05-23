@@ -29,6 +29,9 @@ def deploy_job():
     print("To Relay: " + to_relay)
     print("=== END FORM DATA ===")
 
+    if(not publickey or not from_relays or not to_relay):
+        return jsonify(message='Missing form data')
+
     # Get the job specification from the YAML file
     with open('job.yaml', 'r') as f:
         job_spec_file = f.read()
