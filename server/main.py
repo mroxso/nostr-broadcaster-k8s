@@ -86,5 +86,9 @@ def get_job(job_name):
 def index():
     return render_template('/sites/index.html')
 
+@app.route('/status/<job_name>', methods=['GET'])
+def status(job_name):
+    return render_template('/sites/status.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

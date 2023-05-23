@@ -33,6 +33,7 @@
     </header>
     <div class="container">
       <form action="/deploy" method="post">
+      <!-- <form id="deploy"> -->
         <div class="mb-3">
           <label for="publickey" class="form-label">Public Key</label>
           <input type="text" class="form-control" id="publickey" name="publickey" aria-describedby="publickey" placeholder="82341f882b6eabcd2ba7f1ef90aad961cf074af15b9ef44a09f9d2a8fbfbe6a2">
@@ -46,8 +47,9 @@
           <label for="to_relay" class="form-label">To Relay</label>
           <input type="to_relay" class="form-control" id="to_relay" name="to_relay" placeholder="wss://your-node.example">
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" onclick="deploy()">Submit</button>
       </form>
+      <button type="button" class="btn btn-primary" onclick="deploy()">Submit</button>
 
       <!-- <form action="/deploy" method="post">
         <input type="text" name="publickey" placeholder="82341f882b6eabcd2ba7f1ef90aad961cf074af15b9ef44a09f9d2a8fbfbe6a2">
@@ -59,7 +61,30 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
-    <script>
+    <script>      
+      async function deploy() {
+        console.log("Deploying");
+        console.log(document.getElementById('deploy'))
+
+        await fetch('/deploy', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          body: JSON.stringify({
+            publickey: document.getElementById('publickey').value,
+            from_relays: document.getElementById('from_relays').value,
+            to_relay: document.getElementById('to_relay').value
+          })
+        }).then(function(response) {
+          console.log(response);
+          // redirect to status page
+          // window.location.href = "/status/" + response;
+        }).catch(function(err) {
+          console.log(err);
+        })
+      }
+
       async function nostrLogin() {
         const pubkey = await window.nostr.getPublicKey();
         console.log(pubkey);
