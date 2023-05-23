@@ -4,6 +4,10 @@ from kubernetes import client, config
 import yaml
 import os
 import json
+import logging
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 app = Flask(__name__)
 
