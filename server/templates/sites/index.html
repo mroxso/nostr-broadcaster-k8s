@@ -35,16 +35,16 @@
       <form action="/deploy" method="post">
         <div class="mb-3">
           <label for="publickey" class="form-label">Public Key</label>
-          <input type="text" class="form-control" id="publickey" name="publickey" aria-describedby="publickey">
+          <input type="text" class="form-control" id="publickey" name="publickey" aria-describedby="publickey" placeholder="82341f882b6eabcd2ba7f1ef90aad961cf074af15b9ef44a09f9d2a8fbfbe6a2">
           <div id="publickeyHelp" class="form-text text-white">Your profiles public key <b>(in hex format)</b>.</div>
         </div>
         <div class="mb-3">
           <label for="from_relays" class="form-label">From Relays</label>
-          <input type="text" class="form-control" id="from_relays" name="from_relays">
+          <input type="text" class="form-control" id="from_relays" name="from_relays" placeholder="wss://relay.nostr.band">
         </div>
         <div class="mb-3">
           <label for="to_relay" class="form-label">To Relay</label>
-          <input type="to_relay" class="form-control" id="to_relay" name="to_relay">
+          <input type="to_relay" class="form-control" id="to_relay" name="to_relay" placeholder="wss://your-node.example">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
