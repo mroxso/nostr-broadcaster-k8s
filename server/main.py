@@ -18,6 +18,16 @@ api = client.BatchV1Api()
 # Handle POST requests
 @app.route('/deploy', methods=['POST'])
 def deploy_job():
+    # Form Data
+    publickey = request.form['publickey']
+    from_relays = request.form['from_relays']
+    to_relay = request.form['to_relay']
+    print("=== FORM DATA ===")
+    print("Public Key: " + publickey)
+    print("From Relays: " + from_relays)
+    print("To Relay: " + to_relay)
+    print("=== END FORM DATA ===")
+
     # Get the job specification from the YAML file
     with open('job.yaml', 'r') as f:
         job_spec_file = f.read()
@@ -29,6 +39,11 @@ def deploy_job():
     job.metadata['name'] += '-' + str(uuid.uuid4())
     # print(job.metadata['name'])
 
+    # Edit the job specification
+    job.spec['template']['spec']['containers'][0]['env'][0]['value'] = from_relays
+    job.spec['template']['spec']['containers'][0]['env'][1]['value'] = to_relay
+    job.spec['template']['spec']['containers'][0]['env'][2]['value'] = publickey
+    
     # Create the job on the Kubernetes cluster
     api.create_namespaced_job(body=job, namespace='default')
 
