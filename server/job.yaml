@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
       - name: nostr-broadcast
-        image: ghcr.io/mroxso/nostr-broadcast:latest
+        image: ghcr.io/mroxso/nostr-broadcast:develop
         env:
         - name: RELAY_FROM_URLS
           value: "wss://relay.damus.io, wss://relay.nostr.band"
