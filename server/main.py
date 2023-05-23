@@ -19,6 +19,7 @@ else:
 
 # Get the Kubernetes API client
 api = client.BatchV1Api()
+coreApi = client.CoreV1Api()
 
 # Handle POST requests
 @app.route('/deploy', methods=['POST'])
@@ -76,12 +77,15 @@ def get_jobs():
 
 @app.route('/job/<job_name>', methods=['GET'])
 def get_job(job_name):
-    # Get the job from the Kubernetes cluster
-    job = api.read_namespaced_job(name=job_name, namespace='default')
+    try:
+        # Get the job from the Kubernetes cluster
+        job = api.read_namespaced_job(name=job_name, namespace='default')
 
-    # Return the job
-    # return jsonify(job)
-    return (job.to_dict())
+        # Return the job
+        # return jsonify(job)
+        return (job.to_dict())
+    except:
+        return jsonify(message='Job not found'), 200
 
 @app.route('/', methods=['GET'])
 def index():
@@ -89,17 +93,30 @@ def index():
 
 @app.route('/status/<job_name>', methods=['GET'])
 def status(job_name):
-    job_status = get_job(job_name)['status']
+    try:
+        job_status = get_job(job_name)['status']
 
-    job_active = job_status['active']
-    job_completion_time = job_status['completion_time']
-    job_failed = job_status['failed']
-    job_ready = job_status['ready']
-    job_start_time = job_status['start_time']
-    job_succeeded = job_status['succeeded']
-    job_uncounted_terminated_pods = job_status['uncounted_terminated_pods']
+        job_active = job_status['active']
+        job_completion_time = job_status['completion_time']
+        job_failed = job_status['failed']
+        job_ready = job_status['ready']
+        job_start_time = job_status['start_time']
+        job_succeeded = job_status['succeeded']
+        job_uncounted_terminated_pods = job_status['uncounted_terminated_pods']
 
-    return render_template('/sites/status.html', job_name=job_name, job_active=job_active, job_completion_time=job_completion_time, job_failed=job_failed, job_ready=job_ready, job_start_time=job_start_time, job_succeeded=job_succeeded, job_uncounted_terminated_pods=job_uncounted_terminated_pods)
+        job_logs = "No logs available"
+    except:
+        job_active = "No job found"
+        job_completion_time = "No job found"
+        job_failed = "No job found"
+        job_ready = "No job found"
+        job_start_time = "No job found"
+        job_succeeded = "No job found"
+        job_uncounted_terminated_pods = "No job found"
+
+        job_logs = "No logs available"
+
+    return render_template('/sites/status.html', job_name=job_name, job_active=job_active, job_completion_time=job_completion_time, job_failed=job_failed, job_ready=job_ready, job_start_time=job_start_time, job_succeeded=job_succeeded, job_uncounted_terminated_pods=job_uncounted_terminated_pods, job_logs=job_logs)
 
 if __name__ == '__main__':
     app.run(debug=True)
