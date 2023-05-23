@@ -96,14 +96,14 @@ def get_job(job_name):
 def force_stop_job(job_name):
     # Kubernetes stop job
     try:
-        # Get the job from the Kubernetes cluster
-        job = api.read_namespaced_job(name=job_name, namespace='default')
-
         # Delete the job from the Kubernetes cluster
         api.delete_namespaced_job(name=job_name, namespace='default')
 
+        # Delete the job pods from the Kubernetes cluster
+        coreApi.delete_collection_namespaced_pod(namespace='default', label_selector='job-name=' + job_name)
+
         # Return the job
-        return jsonify(message='Job "' + job.metadata['name'] + '" deleted successfully'), 200
+        return jsonify(message='Job "' + job_name + '" deleted successfully'), 200
     except:
         return jsonify(message='Job not found'), 404
 
