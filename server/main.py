@@ -1,5 +1,5 @@
 import uuid
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, redirect
 from kubernetes import client, config
 import yaml
 import os
@@ -61,7 +61,8 @@ def deploy_job():
 
     # Return a success message
     # return jsonify(message='Job "' + job.metadata['name'] + '" deployed successfully')
-    return job.metadata['name']
+    # return job.metadata['name']
+    return redirect('/status/' + job.metadata['name'])
 
 @app.route('/jobs', methods=['GET'])
 def get_jobs():
