@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify, render_template
 from kubernetes import client, config
 import yaml
 import os
+import json
 
 app = Flask(__name__)
 
@@ -56,19 +57,21 @@ def get_jobs():
     jobs = api.list_namespaced_job(namespace='default')
 
     # Return the list of jobs
-    return jsonify(jobs.items)
+    # return jsonify(jobs.to_dict())
+    # return jsonify(jobs.items)
+    return (jobs.to_dict()['items'])
 
-@app.route('/jobs/<job_name>', methods=['GET'])
+@app.route('/job/<job_name>', methods=['GET'])
 def get_job(job_name):
     # Get the job from the Kubernetes cluster
     job = api.read_namespaced_job(name=job_name, namespace='default')
 
     # Return the job
-    return jsonify(job)
+    # return jsonify(job)
+    return (job.to_dict())
 
 @app.route('/', methods=['GET'])
 def index():
-    # return jsonify(message='Hello world')
     return render_template('/sites/index.html')
 
 if __name__ == '__main__':
