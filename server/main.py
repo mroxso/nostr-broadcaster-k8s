@@ -86,6 +86,23 @@ def get_job(job_name):
         return (job.to_dict())
     except:
         return jsonify(message='Job not found'), 200
+    
+# Force Stop Job
+@app.route('/job/<job_name>/force-stop', methods=['GET'])
+def force_stop_job(job_name):
+    # Kubernetes stop job
+    try:
+        # Get the job from the Kubernetes cluster
+        job = api.read_namespaced_job(name=job_name, namespace='default')
+
+        # Delete the job from the Kubernetes cluster
+        api.delete_namespaced_job(name=job_name, namespace='default')
+
+        # Return the job
+        return jsonify(message='Job "' + job.metadata['name'] + '" deleted successfully'), 200
+    except:
+        return jsonify(message='Job not found'), 404
+
 
 @app.route('/', methods=['GET'])
 def index():
