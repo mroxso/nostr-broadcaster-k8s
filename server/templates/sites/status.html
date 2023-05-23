@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nostr Broadcaster</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  </head>
+  <body class="bg-dark text-white">
+    <!-- <h1>Nostr Broadcaster</h1> -->
+    <header class="p-3 text-bg-dark">
+      <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+          </a>
+  
+          <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
+            <li><a href="https://layer.systems" target="_blank" class="nav-link px-2 text-white">LAYER.systems</a></li>
+          </ul>
+  
+          <!-- <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+            <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search">
+          </form> -->
+  
+          <div class="text-end">
+            <button type="button" id="login" class="btn btn-outline-light me-2" onclick="nostrLogin()">Login</button>
+            <!-- <button type="button" class="btn btn-warning">Sign-up</button> -->
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <h1>{{ job_name }}</h1>
+      <h2>Active: {{ job_active }}</h2>
+      <h2>Completion Time: {{ job_completion_time }}</h2>
+      <h2>Created: {{ job_created }}</h2>
+      <h2>End Time: {{ job_end_time }}</h2>
+      <h2>Job Ready: {{ job_ready }}</h2>
+      <h2>Job Succeeded: {{ job_succeeded }}</h2>
+      <h2>Job Failed: {{ job_failed }}</h2>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+    <script>
+      // get the job name from request path
+      var path = window.location.pathname;
+      var job = path.split('/').pop();
+      // console.log("===== job name =====")
+      // console.log(job);
+      // console.log("===== end job name =====")
+
+      // call the api
+      fetch('/job/'+job)
+        .then(response => {
+          if(response.ok) {
+            return response.json();
+          } else if(response.status == 500) {
+            throw new Error('Job not found!');
+          }
+        })
+        .then(data => {
+          console.log("===== data =====")
+          console.log(data);
+          console.log("===== end data =====")
+        });
+
+      // fetch('/job/'+job)
+      //   .then(response => response.json())
+      //   .then(data => {
+      //     console.log("===== data =====")
+      //     console.log(data);
+      //     console.log("===== end data =====")
+      //   });
+      </script>
+  </body>
+</html>

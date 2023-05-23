@@ -86,5 +86,19 @@ def get_job(job_name):
 def index():
     return render_template('/sites/index.html')
 
+@app.route('/status/<job_name>', methods=['GET'])
+def status(job_name):
+    job_status = get_job(job_name)['status']
+
+    job_active = job_status['active']
+    job_completion_time = job_status['completion_time']
+    job_failed = job_status['failed']
+    job_ready = job_status['ready']
+    job_start_time = job_status['start_time']
+    job_succeeded = job_status['succeeded']
+    job_uncounted_terminated_pods = job_status['uncounted_terminated_pods']
+
+    return render_template('/sites/status.html', job_name=job_name, job_active=job_active, job_completion_time=job_completion_time, job_failed=job_failed, job_ready=job_ready, job_start_time=job_start_time, job_succeeded=job_succeeded, job_uncounted_terminated_pods=job_uncounted_terminated_pods)
+
 if __name__ == '__main__':
     app.run(debug=True)
