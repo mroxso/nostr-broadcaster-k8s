@@ -23,10 +23,14 @@ def deploy_job():
     publickey = request.form['publickey']
     from_relays = request.form['from_relays']
     to_relay = request.form['to_relay']
+    ip = request.remote_addr
+    useragent = request.headers.get('User-Agent')
     print("=== FORM DATA ===")
     print("Public Key: " + publickey)
     print("From Relays: " + from_relays)
     print("To Relay: " + to_relay)
+    print("IP: " + ip)
+    print("User Agent: " + useragent)
     print("=== END FORM DATA ===")
 
     if(not publickey or not from_relays or not to_relay):
