@@ -68,8 +68,12 @@
           <td>{{ job_failed }}</td>
         </tr>
       </table>
-      <textarea>{{ job_logs }}</textarea>
-      <div>
+      <div class="container" id="logs-container">
+        <textarea rows=10 style="width: 100%; max-width: 100%;">{{ job_logs }}</textarea>
+        <!-- <p>{{ job_logs }}</p> -->
+      </div>
+      <hr />
+      <div class="container" id="force-stop-container">
         <button class="btn btn-danger" onclick="forceStop()">Force Stop</button>
       </div>
     </div>
