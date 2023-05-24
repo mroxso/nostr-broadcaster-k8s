@@ -125,14 +125,16 @@ def status(job_name):
         job_succeeded = job_status['succeeded']
         job_uncounted_terminated_pods = job_status['uncounted_terminated_pods']
 
-
-        # get the list of pods running the job
-        job_pods = coreApi.list_namespaced_pod(namespace="default", label_selector=f"job-name={job_name}")
-        # assume there is only one pod running the job
-        pod_name = job_pods.items[0].metadata.name
-        # use the read_namespaced_pod_log method to read the logs of the pod
-        job_logs = coreApi.read_namespaced_pod_log(name=pod_name, namespace="default")
-        # job_logs = "No logs available"
+        try:
+            # get the list of pods running the job
+            job_pods = coreApi.list_namespaced_pod(namespace="default", label_selector=f"job-name={job_name}")
+            # assume there is only one pod running the job
+            pod_name = job_pods.items[0].metadata.name
+            # use the read_namespaced_pod_log method to read the logs of the pod
+            job_logs = coreApi.read_namespaced_pod_log(name=pod_name, namespace="default")
+            # job_logs = "No logs available"
+        except:
+            job_logs = "Could not load logs.."
     except:
         job_active = "No job found"
         job_completion_time = "No job found"
