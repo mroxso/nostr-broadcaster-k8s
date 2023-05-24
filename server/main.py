@@ -7,8 +7,9 @@ import json
 import logging
 from nostr.key import PublicKey
 
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
+if not os.getenv('DEBUG'):
+    log = logging.getLogger('werkzeug')
+    log.setLevel(logging.ERROR)
 
 app = Flask(__name__)
 
